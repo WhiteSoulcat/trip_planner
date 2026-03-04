@@ -1,0 +1,7 @@
+flask
+gunicorn
+gurobipy
+requests
+reportlab
+pandas
+flask-cors
