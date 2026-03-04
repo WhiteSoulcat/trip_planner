@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ท่องเที่ยวเชียงใหม่</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Trirong:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Trirong', serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: url('{{ url_for("static", filename="BG.png") }}') center/cover no-repeat;
+            text-align: center;
+            
+        }
+        
+        .cover-content {
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+        }
+
+/* SVG แทน h1 */
+        .cover-title {
+            width: 100%;
+            max-width: 1200px;
+            height: 260px;
+            position: fixed;
+            top: 50px;
+            animation: fadeIn 1s ease-in;
+        }
+
+/* ตัวอักษรใน SVG */
+        .cover-title text {
+            fill: white;
+            font-family: "Trirong", serif;
+            font-size: 120px;
+            font-weight: 700;
+            filter: drop-shadow(2px 2px 8px rgba(0,0,0,0.5));
+        }
+
+        
+        .start-btn {
+            padding: 32px 112px;
+            font-size: 36
+            font-family: 'Trirong', serif;
+            background: rgb(223, 187, 90);
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            min-width: 500px;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+        }
+        
+        .start-btn:hover {
+            background: rgb(223, 187, 90);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .lang-btn {
+            position: fixed;
+            top: 30px;
+            right: 20px;
+            padding: 0;
+            background: transparent;
+            color: white;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .lang-btn img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 3px solid white;
+        }
+        
+        .lang-btn:hover img {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+
+        /* Mobile (max-width: 600px) */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                justify-content: center;
+            }
+
+            .cover-content {
+                gap: 15px;
+            }
+
+            .cover-title {
+                font-size: 2rem;
+                margin: 0;
+            }
+
+            .start-btn {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+                min-width: auto;
+                width: 90%;
+                max-width: 260px;
+                margin: 10px auto;
+            }
+
+            .lang-btn img {
+                width: 56px;
+                height: 56px;
+            }
+
+            .lang-btn:hover img {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Tablet (601px - 1024px) */
+        @media (min-width: 601px) and (max-width: 1024px) {
+            body {
+                padding: 20px;
+                justify-content: center;
+            }
+
+            .cover-content {
+                gap: 20px;
+            }
+
+            .cover-title {
+                font-size: 2.5rem;
+                margin: 0;
+            }
+
+            .start-btn {
+                padding: 18px 60px;
+                font-size: 1rem;
+                min-width: 300px;
+                margin: 15px auto;
+            }
+
+            .lang-btn img {
+                width: 70px;
+                height: 70px;
+            }
+        }
+
+        /* Desktop (1025px and above) */
+        @media (min-width: 1025px) {
+            body {
+                padding: 20px;
+                justify-content: center;
+            }
+
+            .cover-content {
+                gap: 25px;
+            }
+
+            .cover-title {
+                font-size: 3.5rem;
+                margin: 0;
+            }
+
+            .start-btn {
+                padding: 32px 112px;
+                font-size: 1.5rem;
+                min-width: 500px;
+                margin: 20px auto;
+            }
+
+            .lang-btn img {
+                width: 108px;
+                height: 108px;
+            }
+        }
+
+        /* Logo bar at bottom center */
+        .logo-bar {
+            position: fixed;
+            left: 50%;
+            bottom: 18px;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            z-index: 20;
+            padding: 6px;
+            background: transparent;
+        }
+
+        .logo-wrap {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .logo-wrap:first-child,
+        .logo-wrap:last-child {
+            background: #000000;
+        }
+
+        .logo-wrap img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">
+        <img id="langImg" src="{{ url_for('static', filename='TH.png') }}" alt="Language">
+    </button>
+    
+        <div class="cover-content">
+            <svg class="cover-title" viewBox="0 0 1200 300">
+                <defs>
+                    <path
+                        id="title-curve"
+                        d="M 100 200 Q 600 90 1100 200"
+                    />
+                </defs>
+
+                <text>
+                    <textPath href="#title-curve" startOffset="50%" text-anchor="middle">
+                        ท่องเที่ยวเชียงใหม่
+                    </textPath>
+                </text>
+            </svg>
+        </div>
+    <div class="cover-content">
+        <h1 class="cover-title" id="title"></h1>
+        <button class="start-btn" id="startBtnText" onclick="startPlanning()"> 🧭 เริ่มวางแผนทริปท่องเที่ยวของคุณ</button>
+    </div>
+
+    <script>
+        let currentLang = 'th';
+        
+        const translations = {
+            th: {
+                title: 'ท่องเที่ยวเชียงใหม่',
+                btnText: '🧭 เริ่มวางแผนทริปท่องเที่ยวของคุณ',
+                img: '{{ url_for("static", filename="TH.png") }}'
+            },
+            en: {
+                title: 'Chiang Mai Tourism',
+                btnText: '🧭 Let\'s Start Planning Your Trip',
+                img: '{{ url_for("static", filename="en.jpg") }}'
+            }
+        };
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'th' ? 'en' : 'th';
+            document.documentElement.lang = currentLang;
+            document.getElementById('langImg').src = translations[currentLang].img;
+            document.getElementById('title').textContent = translations[currentLang].title;
+            document.getElementById('startBtnText').textContent = translations[currentLang].btnText;
+        }
+        
+        function startPlanning() {
+            window.location.href = "{{ url_for('main') }}";
+        }
+    </script>
+
+    <div class="logo-bar" aria-hidden="false">
+        <div class="logo-wrap"><img src="{{ url_for('static', filename='sin.png') }}" alt="Logo 1"></div>
+        <div class="logo-wrap"><img src="{{ url_for('static', filename='tes.png') }}" alt="Logo 2"></div>
+        <div class="logo-wrap"><img src="{{ url_for('static', filename='kana.png') }}" alt="Logo 3"></div>
+        <div class="logo-wrap"><img src="{{ url_for('static', filename='wat.png') }}" alt="Logo 4"></div>
+        <div class="logo-wrap"><img src="{{ url_for('static', filename='ttt.jpg') }}" alt="Logo 5"></div>
+    </div>
+</body>
+</html>
