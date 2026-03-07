@@ -1,6 +1,3 @@
-
-from turtle import mode
-
 from statistics import mode
 from typing import Type
 
