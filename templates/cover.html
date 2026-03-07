@@ -265,14 +265,13 @@
                 </defs>
 
                 <text>
-                    <textPath href="#title-curve" startOffset="50%" text-anchor="middle">
+                    <textPath id="curveTitle" href="#title-curve" startOffset="50%" text-anchor="middle">
                         ท่องเที่ยวเชียงใหม่
                     </textPath>
                 </text>
             </svg>
         </div>
     <div class="cover-content">
-        <h1 class="cover-title" id="title"></h1>
         <button class="start-btn" id="startBtnText" onclick="startPlanning()"> 🧭 เริ่มวางแผนทริปท่องเที่ยวของคุณ</button>
     </div>
 
@@ -296,7 +295,7 @@
             currentLang = currentLang === 'th' ? 'en' : 'th';
             document.documentElement.lang = currentLang;
             document.getElementById('langImg').src = translations[currentLang].img;
-            document.getElementById('title').textContent = translations[currentLang].title;
+            document.getElementById('curveTitle').textContent = translations[currentLang].title;
             document.getElementById('startBtnText').textContent = translations[currentLang].btnText;
         }
         
