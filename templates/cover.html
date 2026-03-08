@@ -24,12 +24,15 @@
             font-family: 'Trirong', serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+
             padding: 20px;
+            padding-bottom: 160px; /* กันโลโก้ทับ */
+
             background: url('{{ url_for("static", filename="BG.png") }}') center/cover no-repeat;
             text-align: center;
+
             overflow-x: hidden;
         }
         
@@ -44,7 +47,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 30px;
+            gap: 20px;
             animation: fadeIn 1.2s ease;
         }
 
@@ -66,7 +69,7 @@
         .cover-title text {
             fill: white;
             font-family: "Trirong", serif;
-            font-size: clamp(40px, 7vw, 110px);
+            font-size: clamp(32px, 6vw, 110px);
             font-weight: 700;
             filter: drop-shadow(2px 2px 8px rgba(0,0,0,0.5));
         }
@@ -127,40 +130,46 @@
            RESPONSIVE DESIGN
            ============================================ */
 
-        /* Mobile (max-width: 600px) */
-        @media (max-width: 1024px){
+        /* Mobile (max-width: 768px) */
+        @media (max-width: 768px){
 
             body{
                 padding:15px;
             }
 
             .cover-title{
-                margin-top:20px;
+                margin-top:10px;
             }
 
             .start-btn{
                 width:85%;
-                max-width:320px;
-                padding:16px 24px;
-                font-size:1rem;
+                max-width:300px;
+                padding:14px 20px;
+                font-size:0.9rem;
             }
 
             .lang-btn img{
-                width:60px;
-                height:60px;
+                width:55px;
+                height:55px;
+            }
+
+            /* แก้โลโก้ให้เห็นครบ 5 อัน */
+            .logo-bar{
+                gap:8px;
+                bottom:10px;
             }
 
             .logo-wrap{
-                width:70px;
-                height:70px;
+                width:55px;
+                height:55px;
             }
 
             .logo-wrap img{
-                width:64px;
-                height:64px;
+                width:48px;
+                height:48px;
             }
 
-}
+        }
         /* Logo bar at bottom center */
         .logo-bar {
             position: fixed;
@@ -211,7 +220,7 @@
                 <defs>
                     <path
                         id="title-curve"
-                        d="M 100 220 Q 600 60 1100 220"
+                        d="M 100 180 Q 600 40 1100 180"
                     />
                 </defs>
 
