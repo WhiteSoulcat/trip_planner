@@ -294,16 +294,16 @@
         }
 
         .lang-btn {
-            position: absolute;
-            top: 18px;
-            right: 18px;
+            position: fixed;
+            top: 15px;
+            right: 15px;
             padding: 0;
             background: transparent;
             color: white;
             border: none !important;
             border-radius: 0;
             cursor: pointer;
-            z-index: 30;
+            z-index: 999;
             outline: none;
         }
 
@@ -353,7 +353,10 @@
                 width: 100%;
                 padding: 0;
             }
-
+            .lang-btn{
+                top:10px;
+                right:10px;
+            }
             .panel {
                 padding: 16px;
                 height: auto;
@@ -376,8 +379,8 @@
             }
 
             .lang-btn img {
-                width: 48px;
-                height: 48px;
+                width: 50px;
+                height: 50px;
             }
 
             .daily-trips-container {
@@ -646,150 +649,336 @@
     </script>
 
     <script>
+
         const hotels = JSON.parse(document.getElementById('hotels-data').textContent || '[]');
         const places = JSON.parse(document.getElementById('places-data').textContent || '[]');
+
         let currentLang = 'th';
 
+/* 🌍 AUTO DETECT LANGUAGE */
+        const browserLang = navigator.language || navigator.userLanguage;
+        if(browserLang.startsWith('en')){
+            currentLang = 'en';
+        }
+
+/* 🌍 TRANSLATIONS */
+
         const translations = {
-            th: {
-                title: '🧭 วางแผนทริป', visitors: '👥 ประเภทผู้เข้าชม', thaiAdult: 'ผู้ใหญ่ไทย',
-                thaiChild: 'เด็กไทย', foreignAdult: 'ผู้ใหญ่ต่างชาติ', foreignChild: 'เด็กต่างชาติ',
-                hotel: '🏨 เลือกโรงแรม', selectHotel: '-- เลือกโรงแรม --', dates: '📅 วันเดินทาง',
-                startDate: 'วันเริ่ม', daysCount: 'จำนวนวัน', departTime: 'เวลาออกจากโรงแรม',
-                returnTime: 'เวลากลับมาที่โรงแรม', placesPerDay: 'จำนวนสถานที่ต่อวัน *เเนะนำวันละ 3 - 4 สถานที่ต่อวัน*',budget: '💰 งบประมาณรวม (บาท)',
-                categories: '🛍️ ประเภทสถานที่', culture: 'วัฒนธรรม', nature: 'ธรรมชาติ', creative: 'สร้างสรรค์',
-                mode: '⚙️ โหมดการวางแผน', rating: '⭐ ความพึงพอใจสูงสุด', time: '⏱️ เดินทางสั้นที่สุด',
-                money: '💰 ประหยัดงบประมาณ', planBtn: '✨ วางแผนท่องเที่ยว', formDesc: 'กรอกข้อมูลแล้วกดปุ่มเพื่อสร้างแผนการท่องเที่ยว',
-                tripResult: '🗺️ แผนการเดินทาง', resultDesc: 'ผลการวางแผนจะแสดงที่นี่หลังจากที่คุณสร้างแผนการท่องเที่ยว',
-                totalRating: 'คะแนน', totalDistance: 'ระยะทาง', totalCost: 'ค่าใช้จ่าย',
-                dayLabel: 'วันที่', planAgainBtn: '📄 วางแผนใหม่', errorMsg: 'เกิดข้อผิดพลาด',
-                img: '{{ url_for("static", filename="TH.png") }}'
-            },
-            en: {
-                title: '🧭 Trip Planner', visitors: '👥 Visitor Types', thaiAdult: 'Thai Adults',
-                thaiChild: 'Thai Children', foreignAdult: 'Foreign Adults', foreignChild: 'Foreign Children',
-                hotel: '🏨 Select Hotel', selectHotel: '-- Select Hotel --', dates: '📅 Travel Dates',
-                startDate: 'Start Date', daysCount: 'Number of Days', departTime: 'Departure Time',
-                returnTime: 'Return Time', placesPerDay: 'Places per Day *Recommended 3-4 places per day*', budget: '💰 Total Budget (Baht)',
-                categories: '🛍️ Preferred Categories', culture: 'Culture', nature: 'Nature', creative: 'Creative',
-                mode: '⚙️ Planning Mode', rating: '⭐ Highest Satisfaction', time: '⏱️ Shortest Journey',
-                money: '💰 Budget Friendly', planBtn: '✨ Plan Trip', formDesc: 'Fill in and click to create a trip plan',
-                tripResult: '🗺️ Travel Plan', resultDesc: 'Planning results will appear here after you create a trip plan',
-                totalRating: 'Score', totalDistance: 'Distance', totalCost: 'Cost',
-                dayLabel: 'Day', planAgainBtn: '📄 Plan Again', errorMsg: 'Error',
-                img: '{{ url_for("static", filename="en.jpg") }}'
-            }
+
+        th:{
+        title:'🧭 วางแผนทริป',
+        selectHotel:'-- เลือกโรงแรม --',
+        dayLabel:'วันที่',
+        start:'เริ่ม',
+        arrive:'กลับถึง',
+        minute:'นาที',
+        baht:'บาท',
+        errorMsg:'เกิดข้อผิดพลาด',
+        img:'/static/TH.png'
+        },
+
+        en:{
+        title:'🧭 Trip Planner',
+        selectHotel:'-- Select Hotel --',
+        dayLabel:'Day',
+        start:'Start',
+        arrive:'Return',
+        minute:'min',
+        baht:'Baht',
+        errorMsg:'Error',
+        img:'/static/en.jpg'
+        }
+
         };
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'th' ? 'en' : 'th';
-            document.documentElement.lang = currentLang;
-            document.getElementById('langImg').src = translations[currentLang].img;
-            updatePageLanguage();
+/* 🌍 LANGUAGE TOGGLE */
+
+        function toggleLanguage(){
+
+        currentLang = currentLang === 'th' ? 'en' : 'th';
+
+        document.documentElement.lang = currentLang;
+
+        document.getElementById('langImg').src = translations[currentLang].img;
+
+        updatePageLanguage();
+
+        renderHotels();
+
         }
 
-        function updatePageLanguage() {
-            const t = translations[currentLang];
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (t[key]) el.textContent = t[key];
-            });
+        /* 🌍 UPDATE TEXT */
+
+        function updatePageLanguage(){
+
+        const t = translations[currentLang];
+
+        document.querySelectorAll('[data-i18n]').forEach(el =>{
+
+        const key = el.getAttribute('data-i18n');
+
+        if(t[key]) el.textContent = t[key];
+
+        });
+
         }
+
+        /* 🏨 RENDER HOTELS */
 
         const hotelSel = document.getElementById('hotel');
-        hotels.forEach(h => {
-            const o = document.createElement('option');
-            o.value = h.name;
-            o.textContent = h.name;
-            hotelSel.appendChild(o);
+
+        function renderHotels(){
+
+        hotelSel.innerHTML = '';
+
+        const defaultOption = document.createElement('option');
+
+        defaultOption.value = '';
+
+        defaultOption.textContent = translations[currentLang].selectHotel;
+
+        hotelSel.appendChild(defaultOption);
+
+        hotels.forEach(h=>{
+
+        const o = document.createElement('option');
+
+        o.value = h.name;
+
+        o.textContent = currentLang === 'en' && h.name_en ? h.name_en : h.name;
+
+        hotelSel.appendChild(o);
+
         });
+
+        }
+
+        /* 📅 DATE LIMIT */
 
         document.getElementById('startDate').min = new Date().toISOString().split('T')[0];
 
-        document.getElementById('planForm').onsubmit = e => {
+        /* 🌧️ WEATHER API */
+
+        async function getWeather(){
+
+        try{
+
+            const res = await fetch(
+            "https://api.openweathermap.org/data/2.5/weather?q=Chiang%20Mai&appid=8ac59134c80b6ba9b1ebbed5c8b312d8&units=metric"
+            );
+
+        const data = await res.json();
+
+        const weather = data.weather[0].main;
+
+        if(weather==="Rain"){
+
+            document.getElementById("weatherBox").innerHTML="🌧️ Rain expected today";
+
+        }else{
+
+            document.getElementById("weatherBox").innerHTML="☀️ Weather looks good";
+
+        }
+
+        }catch(e){
+            console.log(e);
+        }
+
+        }
+
+        getWeather();
+
+        /* 🚀 PLAN FORM */
+
+            document.getElementById('planForm').onsubmit = e => {
+
             e.preventDefault();
-            const days = [];
+
+            const days=[];
+
             let d = new Date(document.getElementById('startDate').value);
-            for (let i = 0; i < document.getElementById('daysCount').value; i++) {
+
+            for(let i=0;i<document.getElementById('daysCount').value;i++){
+
                 days.push(d.toISOString().split('T')[0]);
-                d.setDate(d.getDate() + 1);
+
+                d.setDate(d.getDate()+1);
+
             }
 
-            fetch('/api/plan', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    hotel: document.getElementById('hotel').value,
-                    days: days,
-                    departTime: document.getElementById('departTime').value,
-                    returnTime: document.getElementById('returnTime').value,
-                    placesCount: document.getElementById('placesPerDay').value,
-                    budget: document.getElementById('budget').value,
-                    mode: document.querySelector('input[name=mode]:checked').value,
-                    categories: {
-                        culture: document.getElementById('culture').checked,
-                        nature: document.getElementById('nature').checked,
-                        creative: document.getElementById('creative').checked
-                    },
-                    visitors: {
-                        thai_adult: +document.getElementById('thai_adult').value,
-                        thai_child: +document.getElementById('thai_child').value,
-                        foreign_adult: +document.getElementById('foreign_adult').value,
-                        foreign_child: +document.getElementById('foreign_child').value
-                    }
-                })
-            })
-            .then(r => r.ok ? r.json() : Promise.reject(r))
-            .then(showResult)
-            .catch(err => {
-                console.error(err);
-                document.getElementById('resultsContainer').innerHTML = '<p style="color: #d9534f;">' + translations[currentLang].errorMsg + '</p>';
-            });
+        fetch('/api/plan',{
+
+            method:'POST',
+
+            headers:{'Content-Type':'application/json'},
+
+            body:JSON.stringify({
+
+            hotel:document.getElementById('hotel').value,
+
+            days:days,
+
+            departTime:document.getElementById('departTime').value,
+
+            returnTime:document.getElementById('returnTime').value,
+
+            placesCount:document.getElementById('placesPerDay').value,
+
+            budget:document.getElementById('budget').value,
+
+            mode:document.querySelector('input[name=mode]:checked').value,
+
+            categories:{
+            culture:document.getElementById('culture').checked,
+            nature:document.getElementById('nature').checked,
+            creative:document.getElementById('creative').checked
+        },
+
+            visitors:{
+            thai_adult:+document.getElementById('thai_adult').value,
+            thai_child:+document.getElementById('thai_child').value,
+            foreign_adult:+document.getElementById('foreign_adult').value,
+            foreign_child:+document.getElementById('foreign_child').value
+        }
+
+        })
+
+        })
+
+        .then(r=>r.ok?r.json():Promise.reject(r))
+
+        .then(showResult)
+
+        .catch(err=>{
+
+        console.error(err);
+
+        document.getElementById('resultsContainer').innerHTML=
+        '<p style="color:red">'+translations[currentLang].errorMsg+'</p>';
+
+        });
+
         };
 
-        function showResult(r) {
-            document.getElementById('resultsContainer').innerHTML = '';
-                document.getElementById('tripResult').classList.remove('hidden');
-            
-                document.getElementById('totalRating').textContent = r.summary.total_rating.toFixed(1);
-                document.getElementById('totalDistance').textContent = r.summary.total_distance + ' km';
-                document.getElementById('totalCost').textContent = r.summary.total_cost + ' บาท';
+        /* 📍 GET PLACE NAME */
 
-                // Get display name based on current language
-                const getPlaceName = (placeName) => {
-                    const place = places.find(p => p.name === placeName);
-                    if (!place) return placeName;
-                    return currentLang === 'en' && place.name_en ? place.name_en : place.name;
-                };
+        function getPlaceName(placeName){
 
-                let html = '<div class="daily-trips-container">';
-                r.days.forEach((day, i) => {
-                    html += `<div class="day-column">`;
-                    html += `<h3>${translations[currentLang].dayLabel} ${i+1} — ${day.date}</h3>`;
+        const place = places.find(p=>p.name===placeName);
 
-                    day.route.forEach(e => {
-                        if (e.type === 'hotel_start') {
-                            html += `<div class="trip-step hotel"><div class="step-title">🏨 ${e.name}</div><div class="step-meta">เริ่ม: ${e.depart}</div></div>`;
-                        } else if (e.type === 'hotel_end') {
-                            html += `<div class="trip-step hotel"><div class="step-title">🏨 ${e.name}</div><div class="step-meta">กลับถึง: ${e.arrive}</div></div>`;
-                        } else if (e.type === 'place') {
-                            const displayName = getPlaceName(e.name);
-                            html += `<div class="trip-step"><div class="step-title">📍 ${displayName}</div><div class="step-meta">${e.arrive} - ${e.depart} &middot; ${e.stay} นาที</div><div class="step-meta">💵 ${e.cost} บาท &nbsp; ⭐ ${e.rating}</div></div>`;
-                        }
-                    });
+        if(!place) return placeName;
 
-                    html += `</div>`;
-                });
-                html += '</div>';
-                document.getElementById('dailyTrips').innerHTML = html;
+            return currentLang==='en' && place.name_en ? place.name_en : place.name;
+
         }
 
-        function planAgain() {
+        /* 🗺️ SHOW RESULT */
+
+        function showResult(r){
+
+            document.getElementById('resultsContainer').innerHTML='';
+
+            document.getElementById('tripResult').classList.remove('hidden');
+
+            document.getElementById('totalRating').textContent=r.summary.total_rating.toFixed(1);
+
+            document.getElementById('totalDistance').textContent=r.summary.total_distance+' km';
+
+            document.getElementById('totalCost').textContent=r.summary.total_cost+' '+translations[currentLang].baht;
+
+            let html='<div class="daily-trips-container">';
+
+            r.days.forEach((day,i)=>{
+
+            html+=`<div class="day-column">`;
+
+            html+=`<h3>${translations[currentLang].dayLabel} ${i+1} — ${day.date}</h3>`;
+
+            day.route.forEach(e=>{
+
+            if(e.type==='hotel_start'){
+
+                html+=`
+                <div class="trip-step hotel">
+                <div class="step-title">🏨 ${e.name}</div>
+                <div class="step-meta">${translations[currentLang].start}: ${e.depart}</div>
+                </div>
+                `;
+
+                }
+
+            else if(e.type==='hotel_end'){
+
+                html+=`
+                <div class="trip-step hotel">
+                <div class="step-title">🏨 ${e.name}</div>
+                <div class="step-meta">${translations[currentLang].arrive}: ${e.arrive}</div>
+                </div>
+                `;
+
+                }
+
+            else if(e.type==='place'){
+
+                const displayName=getPlaceName(e.name);
+
+                html+=`
+                <div class="trip-step">
+
+                <div class="step-title">
+
+                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(displayName)}" target="_blank">
+
+                📍 ${displayName}
+
+                </a>
+
+            </div>
+
+            <div class="step-meta">
+
+            ${e.arrive} - ${e.depart} · ${e.stay} ${translations[currentLang].minute}
+
+            </div>
+
+            <div class="step-meta">
+
+            💵 ${e.cost} ${translations[currentLang].baht} ⭐ ${e.rating}
+
+            </div>
+
+            </div>
+        `;
+
+        }
+
+        });
+
+        html+=`</div>`;
+
+        });
+
+        html+='</div>';
+
+            document.getElementById('dailyTrips').innerHTML=html;
+
+        }
+
+        /* 🔁 PLAN AGAIN */
+
+        function planAgain(){
+
             document.getElementById('tripResult').classList.add('hidden');
-            document.getElementById('resultsContainer').innerHTML = '<p class="info-text">' + translations[currentLang].resultDesc + '</p>';
+
         }
+
+        /* 🚀 INIT */
+
+        renderHotels();
 
         updatePageLanguage();
+
     </script>
 </body>
 </html>
